@@ -11,10 +11,10 @@ from rest_framework import permissions
 from rest_framework.views import APIView
 
 class webinarAdder(APIView):
-    permissions_classes=[permissions.IsAuthenticated]
+    permissions_classes=[permissions.IsAuthenticatedOrReadOnly]
     parser_classes=[JSONParser]
     def get(self,request):
-        obj=webinarsmodel.objects.filter(user=request.user.id)
+        obj=webinarsmodel.objects.all()
         serializer=Taskserializer(obj,many=True)
         return Response(serializer.data,status=200)
 
@@ -29,12 +29,7 @@ class webinarAdder(APIView):
             return Response({
                 'status':'added'
             },status=201)
-
-class webinarModifier(APIView):
-    permissions_classes=[permissions.IsAuthenticated]
-    parser_classes=[JSONParser]
-    
-    def post(self,request):
+    def patch(self,request):
         obj=webinarsmodel.objects.filter(id=request.data['id'])
         obj.update(status=request.data['status'])
         return Response(status=202)
@@ -44,14 +39,10 @@ class webinarModifier(APIView):
             return Response(status=202)
         except:
             return Response(status=404)
-
-class webinarDelete(APIView):
-    permissions_classes=[permissions.IsAuthenticated]
-    parser_classes=[JSONParser]
-    def get(self,request,pk):
+    def delete(self,request,pk):
         try:
             obj=webinarsmodel.objects.filter(id=pk)
             obj.delete()
-            return Response(status=202)
+            return Response(status=204)
         except:
             return Response(status=404)

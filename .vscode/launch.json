@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
@@ -16,6 +23,7 @@
             "externalConsole": false,
             "MIMode": "gdb",
             "miDebuggerPath": "/path/to/gdb",
+            "env": {"PYTHONPATH": "${workspaceRoot}"},
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",
